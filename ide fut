@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDE FUT - Estatísticas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <style>
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6 text-center">IDE FUT - Estatísticas</h1>
+        
+        <div class="mb-6">
+            <div class="flex space-x-4">
+                <button class="tab-button bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" data-tab="artilharia">Artilharia</button>
+                <button class="tab-button bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" data-tab="resultados">Resultados</button>
+                <button class="tab-button bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" data-tab="retrospecto">Retrospecto</button>
+            </div>
+        </div>
+        
+        <div id="artilharia" class="tab-content active">
+            <h2 class="text-2xl font-semibold mb-4">Artilharia</h2>
+            <table class="w-full bg-white shadow-md rounded mb-4">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Jogador</th>
+                        <th class="py-2 px-4 border-b">Gols</th>
+                    </tr>
+                </thead>
+                <tbody id="artilharia-body">
+                    <!-- Rows will be added dynamically -->
+                </tbody>
+            </table>
+            <button id="add-artilheiro" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Adicionar Artilheiro</button>
+        </div>
+        
+        <div id="resultados" class="tab-content">
+            <h2 class="text-2xl font-semibold mb-4">Resultados IDE FUT</h2>
+            <table class="w-full bg-white shadow-md rounded mb-4">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">Data</th>
+                        <th class="py-2 px-4 border-b">Adversário</th>
+                        <th class="py-2 px-4 border-b">Placar</th>
+                    </tr>
+                </thead>
+                <tbody id="resultados-body">
+                    <!-- Rows will be added dynamically -->
+                </tbody>
+            </table>
+            <button id="add-resultado" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Adicionar Resultado</button>
+        </div>
+        
+        <div id="retrospecto" class="tab-content">
+            <h2 class="text-2xl font-semibold mb-4">Retrospecto IDE FUT</h2>
+            <table class="w-full bg-white shadow-md rounded">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="py-2 px-4 border-b">J</th>
+                        <th class="py-2 px-4 border-b">V</th>
+                        <th class="py-2 px-4 border-b">E</th>
+                        <th class="py-2 px-4 border-b">D</th>
+                        <th class="py-2 px-4 border-b">GP</th>
+                        <th class="py-2 px-4 border-b">GC</th>
+                        <th class="py-2 px-4 border-b">SG</th>
+                    </tr>
+                </thead>
+                <tbody id="retrospecto-body">
+                    <tr>
+                        <td class="py-2 px-4 border-b text-center" id="jogos">0</td>
+                        <td class="py-2 px-4 border-b text-center" id="vitorias">0</td>
+                        <td class="py-2 px-4 border-b text-center" id="empates">0</td>
+                        <td class="py-2 px-4 border-b text-center" id="derrotas">0</td>
+                        <td class="py-2 px-4 border-b text-center" id="gols-pro">0</td>
+                        <td class="py-2 px-4 border-b text-center" id="gols-contra">0</td>
+                        <td class="py-2 px-4 border-b text-center" id="saldo-gols">0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching logic
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                tabButtons.forEach(btn => {
+                    btn.classList.remove('bg-blue-700', 'bg-green-700', 'bg-yellow-700');
+                    btn.classList.add('bg-blue-500', 'bg-green-500', 'bg-yellow-500');
+                });
+                document.getElementById(tabId).classList.add('active');
+                button.classList.remove('bg-blue-500', 'bg-green-500', 'bg-yellow-500');
+                button.classList.add(`bg-${button.classList[1].split('-')[1]}-700`);
+            });
+        });
+
+        // Artilharia logic
+        const addArtilheiroButton = document.getElementById('add-artilheiro');
+        const artilhariaBody = document.getElementById('artilharia-body');
+
+        addArtilheiroButton.addEventListener('click', () => {
+            const jogador = prompt('Nome do jogador:');
+            const gols = prompt('Número de gols:');
+            if (jogador && gols) {
+                const row = artilhariaBody.insertRow();
+                row.innerHTML = `
+                    <td class="py-2 px-4 border-b">${jogador}</td>
+                    <td class="py-2 px-4 border-b text-center">${gols}</td>
+                `;
+            }
+        });
+
+        // Resultados logic
+        const addResultadoButton = document.getElementById('add-resultado');
+        const resultadosBody = document.getElementById('resultados-body');
+
+        addResultadoButton.addEventListener('click', () => {
+            const data = prompt('Data do jogo:');
+            const adversario = prompt('Nome do adversário:');
+            const placar = prompt('Placar (ex: 2-1):');
+            if (data && adversario && placar) {
+                const row = resultadosBody.insertRow();
+                row.innerHTML = `
+                    <td class="py-2 px-4 border-b">${data}</td>
+                    <td class="py-2 px-4 border-b">${adversario}</td>
+                    <td class="py-2 px-4 border-b text-center">${placar}</td>
+                `;
+                updateRetrospecto(placar);
+            }
+        });
+
+        // Retrospecto logic
+        function updateRetrospecto(placar) {
+            const [golsPro, golsContra] = placar.split('-').map(Number);
+            document.getElementById('jogos').textContent = parseInt(document.getElementById('jogos').textContent) + 1;
+            document.getElementById('gols-pro').textContent = parseInt(document.getElementById('gols-pro').textContent) + golsPro;
+            document.getElementById('gols-contra').textContent = parseInt(document.getElementById('gols-contra').textContent) + golsContra;
+            
+            if (golsPro > golsContra) {
+                document.getElementById('vitorias').textContent = parseInt(document.getElementById('vitorias').textContent) + 1;
+            } else if (golsPro < golsContra) {
+                document.getElementById('derrotas').textContent = parseInt(document.getElementById('derrotas').textContent) + 1;
+            } else {
+                document.getElementById('empates').textContent = parseInt(document.getElementById('empates').textContent) + 1;
+            }
+
+            const saldoGols = parseInt(document.getElementById('gols-pro').textContent) - parseInt(document.getElementById('gols-contra').textContent);
+            document.getElementById('saldo-gols').textContent = saldoGols;
+        }
+    </script>
+</body>
+</html>
